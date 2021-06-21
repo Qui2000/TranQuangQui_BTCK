@@ -1,0 +1,103 @@
+﻿@model PagedList.IPagedList<ModelEFs.Models.Product>
+@using PagedList.Mvc
+@using PagedList
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@section header{
+    <i class="fa fa-user"></i>&nbsp;Quản Lý Sản Phẩm
+}
+@using (Html.BeginForm("Index", "Products", FormMethod.Post))
+{
+    <div class="col-lg-12 form-group" style="margin-top:20px;">
+        <div class="col-md-6">
+            @Html.ActionLink("Tạo Mới", "Create", "Products", new { @class = "btn btn-danger" })
+        </div>
+        <div class="col-md-4">
+            <input type="text" value="@ViewBag.SearchString" name="searchString" placeholder="Nhập Từ Khóa Cần Tìm Kiếm" class="form-control" />
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Tìm kiếm" class="btn btn-default" />
+        </div>
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            STT
+        </th>
+        <th>
+            ID
+        </th>
+        <th>
+            Tên Sản Phẩm
+        </th>
+        <th>
+            Đơn Giá
+        </th>
+        <th>
+            Số Lượng
+        </th>
+        <th>
+            Hình Ảnh
+        </th>
+        <th>
+            Mô Tả
+        </th>
+        <th>
+            Trạng Thái
+        </th>
+        <th>
+            Mã Thể Loại
+        </th>
+        <th>
+            Thao Tác
+        </th>
+    </tr>
+ 
+        <tr id="row_@item.ID">
+            <td>
+                @i
+            </td>
+            <td>
+                @item.ID
+            </td>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.UnitCost
+            </td>
+            <td>
+                @item.Quantity
+            </td>
+            <td>
+                <img src="@Url.Content("~/Jmages/" +item.Image)" width="50" height="50" />
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                @item.Status
+            </td>
+            <td>
+                @item.Category_ID
+            </td>
+            <td>
+                <a href="~/Admin/Products/Create/@item.Name"><i class="fa fa-refresh"></i>Sửa</a>
+
+                &nbsp;
+                @Ajax.ActionLink("Xóa", "Delete", new { @username = item.ID }, new AjaxOptions
+           {
+               Confirm = "Bạn có muốn xóa bản ghi này?",
+               OnComplete = "$('#row_" + @item.ID + "').remove()",
+               HttpMethod = "Delete"
+           }, new { @class = "glyphicon glyphicon-trash" })
+            </td>
+        </tr>
+        i++;
+    }
+
+</table>
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
