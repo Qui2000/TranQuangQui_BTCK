@@ -1,19 +1,20 @@
 ﻿using ModelEFs.DAO;
 using System;
+using ModelEFs.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Xml.Linq;
+using PagedList;
 
 namespace TestUngDung.Areas.Admin.Controllers
 {
     public class ProductController : BaseController
     {
         // GET: Admin/Product
-        // GET: Admin/Content
-        public ActionResult Index(string searchString, int page = 1, int pageSize = 10)
+        public ActionResult Index(string searchString, int page = 1, int pageSize = 5)
         {
             var dao = new ProductDao();
             var model = dao.ListAllPaging(searchString, page, pageSize);
@@ -28,6 +29,25 @@ namespace TestUngDung.Areas.Admin.Controllers
             SetViewBag();
             return View();
         }
+        [HttpPost]
+        public ActionResult Create(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                new ProductDao().Create(product);
+                return RedirectToAction("Index");
+
+            }
+            return View();
+        }
+
+     
+        public ActionResult Detail(int id)
+        {
+            var product = new ProductDao().ViewDetail(id);
+            return View(product);
+        }
+
         public JsonResult LoadImages(long id)
         {
             ProductDao dao = new ProductDao();
@@ -79,6 +99,14 @@ namespace TestUngDung.Areas.Admin.Controllers
         {
             var dao = new ProductCategoryDao();
             ViewBag.CategoryID = new SelectList(dao.ListAll(), "ID", "Name", selectedId);
+        }
+
+
+
+        public ActionResult Edit(int id)
+        {
+            var product = new ProductDao().ViewDetail(id);
+            return View(product);
         }
     }
 }

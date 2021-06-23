@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ModelEFs.ViewModel;
 
 namespace ModelEFs.DAO
 {
@@ -32,7 +33,7 @@ namespace ModelEFs.DAO
                 model = model.Where(x => x.Name.Contains(searchString) || x.Name.Contains(searchString));
             }
 
-            return model.OrderByDescending(x => x.CreatedDate).ToPagedList(page, pageSize);
+            return model.OrderBy(x => x.Quantity).ThenByDescending(x => x.Price).ToPagedList(page, pageSize);
         }
         /// <summary>
         /// Get list product by category
@@ -125,6 +126,19 @@ namespace ModelEFs.DAO
         public Product ViewDetail(long id)
         {
             return db.Products.Find(id);
+        }
+        public long Create(Product product)
+        {
+            product.CreatedDate = DateTime.Now;
+            db.Products.Add(product);
+            db.SaveChanges();
+            return product.ID;
+        }
+        public long Insert(Product entity)
+        {
+            db.Products.Add(entity);
+            db.SaveChanges();
+            return entity.ID;
         }
     }
 }

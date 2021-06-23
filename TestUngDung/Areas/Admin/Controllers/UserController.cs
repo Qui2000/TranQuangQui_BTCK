@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,7 +14,7 @@ namespace TestUngDung.Areas.Admin.Controllers
     public class UserController : BaseController
     {
         // GET: Admin/User
-        public ActionResult Index(string searchString, int page = 1, int pageSize =5)
+        public ActionResult Index(string searchString, int page = 1, int pageSize = 5)
         {
             var dao = new UserDao();
             var model = dao.ListAllPaging(searchString, page, pageSize);
@@ -23,13 +24,13 @@ namespace TestUngDung.Areas.Admin.Controllers
             return View(model);
         }
         [HttpGet]
-       
+
         public ActionResult Create()
         {
             return View();
         }
 
-       
+
         public ActionResult Edit(int id)
         {
             var user = new UserDao().ViewDetail(id);
@@ -37,7 +38,7 @@ namespace TestUngDung.Areas.Admin.Controllers
         }
 
         [HttpPost]
-       
+
         public ActionResult Create(User user)
         {
             if (ModelState.IsValid)
@@ -61,7 +62,7 @@ namespace TestUngDung.Areas.Admin.Controllers
             return View("Index");
         }
         [HttpPost]
-      
+
         public ActionResult Edit(User user)
         {
             if (ModelState.IsValid)
@@ -87,8 +88,9 @@ namespace TestUngDung.Areas.Admin.Controllers
             }
             return View("Index");
         }
+
+
         [HttpDelete]
-        
         public ActionResult Delete(int id)
         {
             new UserDao().Delete(id);

@@ -52,6 +52,7 @@ namespace ModelEFs.DAO
                 }
                 user.Address = entity.Address;
                 user.Email = entity.Email;
+                user.Phone = entity.Phone;
                 user.ModifiedBy = entity.ModifiedBy;
                 user.ModifiedDate = DateTime.Now;
                 db.SaveChanges();
@@ -157,6 +158,8 @@ namespace ModelEFs.DAO
             db.SaveChanges();
             return user.Status;
         }
+
+        //xóa
         public bool Delete(int id)
         {
             try
@@ -172,7 +175,6 @@ namespace ModelEFs.DAO
             }
 
         }
-
         public bool CheckUserName(string userName)
         {
             return db.Users.Count(x => x.UserName == userName) > 0;
